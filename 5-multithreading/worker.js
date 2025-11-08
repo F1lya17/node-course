@@ -1,19 +1,16 @@
 const { parentPort, workerData } = require("worker_threads");
 
-const compute = ({ start, end, chunkSize }) => {
-  // Каждый воркер генерирует свой кусок массива
-  const arr = [];
-  for (let i = 0; i < chunkSize; i++) {
-    const item = Math.floor(Math.random() * 100);
-    arr.push(item);
-  }
-
+function countDivisibleByThree(chunk) {
   let count = 0;
-  for (let i = 0; i < arr.length; i++) {
-    if (arr[i] % 3 === 0) count++;
+  for (let i = 0; i < chunk.length; i++) {
+    if (chunk[i] % 3 === 0) count++;
   }
-
   return count;
-};
+}
 
-parentPort.postMessage(compute(workerData));
+// Обработка данных от основного процесса
+if (parentPort) {
+  const { chunk } = workerData;
+  const count = countDivisibleByThree(chunk);
+  parentPort.postMessage(count);
+}
