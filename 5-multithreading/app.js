@@ -65,12 +65,6 @@ function parallelCount(arr) {
   const arr = createArray();
   let results = {};
 
-  // 1. Линейный подход с filter
-  results.linearFilter = linearCountFilter(arr);
-  console.log(`Результат (filter): ${results.linearFilter.toLocaleString()}`);
-  console.log();
-
-  // 2. Линейный подход с for loop
   results.linearForLoop = linearCountForLoop(arr);
   console.log(
     `Результат (for loop): ${results.linearForLoop.toLocaleString()}`
