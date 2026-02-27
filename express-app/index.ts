@@ -1,4 +1,4 @@
-import express from "express";
+import express, { type NextFunction, type Request, type Response } from "express";
 import { userRouter } from "./users/users.js";
 import { weatherRouter } from "./weather/weather.js";
 
@@ -21,7 +21,7 @@ app.use((req, res) => {
   res.status(404).send("Маршрут не найден");
 });
 
-app.use((err, req, res, next) => {
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.log(err.message);
   res.status(500).send(err.message);
 });

@@ -1,7 +1,9 @@
-export const printWeather = (data) => {
+import type { WeatherResponse } from "./weather.js";
+
+export const printWeather = (data: WeatherResponse) => {
   const strCity = `Погода в ${data.name}`;
 
-  const strDescription = data.weather[0].description;
+  const strDescription = data.weather[0]?.description;
 
   const strTemp = `Температура: ${data.main.temp}°, (ощущается как ${data.main.feels_like}°)`;
 
