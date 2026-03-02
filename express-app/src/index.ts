@@ -1,3 +1,4 @@
+// учебный файл
 import express, { type NextFunction, type Request, type Response } from "express";
 import { userRouter } from "./users/users.js";
 import { weatherRouter } from "./weather/weather.js";
