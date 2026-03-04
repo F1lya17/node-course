@@ -1,5 +1,7 @@
 import axios from "axios";
-import express from "express";
+import type { Request, Response } from "express";
+import { BaseController } from "../common/base-controller.js";
+import type { LoggerService } from "../logger/logger.service.js";
 import { printWeather } from "./print-weather.js";
 
 export interface WeatherResponse {
@@ -50,12 +52,20 @@ export interface WeatherResponse {
   cod: number;
 }
 
-const token = "c393a1ec92b2ff26bf8716986c9932da";
+const TOKEN = "c393a1ec92b2ff26bf8716986c9932da";
 let globalTown = "ufa";
-const weatherRouter = express.Router();
 
-weatherRouter
-  .post("/change-town", (req, res) => {
+export class WeatherController extends BaseController {
+  constructor(logger: LoggerService) {
+    super(logger);
+    this.bindRoutes([
+      { path: "/change-town", func: this.changeTown, method: "post" },
+      { path: "/", func: this.getWeather, method: "get" },
+      { path: "/:town", func: this.getWeather, method: "get" },
+    ]);
+  }
+
+  changeTown(req: Request, res: Response) {
     const { town } = req.body;
 
     if (!town || typeof town !== "string" || town.trim() === "") {
@@ -63,26 +73,30 @@ weatherRouter
     }
 
     globalTown = town.trim();
-    res.send("Город изменен");
-  })
-  .use(async (req, res, next) => {
+    this.ok(res, "Город изменен");
+  }
+
+  async getWeather(req: Request, res: Response) {
     try {
+      const town = req.params.town || globalTown;
+
       const { data }: { data: WeatherResponse } = await axios.get(
         "https://api.openweathermap.org/data/2.5/weather",
         {
           params: {
-            q: req.url.slice(1) || globalTown,
-            appid: token,
+            q: town,
+            appid: TOKEN,
             lang: "ru",
             units: "metric",
           },
         },
       );
 
-      res.send(printWeather(data));
+      const weatherHtml = printWeather(data);
+      this.ok(res, weatherHtml);
     } catch (error) {
-      next(error);
+      this.logger.error(`Ошибка при получении погоды: ${error}`);
+      res.status(500).send("Ошибка при получении данных о погоде");
     }
-  });
-
-export { weatherRouter };
+  }
+}

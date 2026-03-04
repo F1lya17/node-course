@@ -1,13 +1,11 @@
-import express from "express";
 import { App } from "./app.js";
-import { weatherRouter } from "./weather/weather.js";
-import { userRouter } from "./users/users.js";
+import { LoggerService } from "./logger/logger.service.js";
+import { UsersController } from "./users/users-controller.js";
+import { WeatherController } from "./weather/weather-controller.js";
 
 async function bootstrap() {
-  const app = new App([
-    { path: "/users", router: userRouter },
-    { path: "/weather", router: weatherRouter },
-  ]);
+  const logger = new LoggerService();
+  const app = new App(new UsersController(logger), new WeatherController(logger), logger);
 
   await app.init();
 }
