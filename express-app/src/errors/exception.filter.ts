@@ -1,20 +1,20 @@
 import type { NextFunction, Request, Response } from "express";
-import type { LoggerService } from "../logger/logger.service.js";
+import { inject, injectable } from "inversify";
+import "reflect-metadata";
+import type { ILoggerService } from "../logger/logger.service.js";
 import type { IExceptionFilter } from "./exception.filter.interface.js";
 import { HTTPError } from "./http-error.class.js";
+import { FILE_TYPES } from "../file-types.js";
 
+@injectable()
 export class ExceptionFilter implements IExceptionFilter {
-  logger: LoggerService;
-
-  constructor(logger: LoggerService) {
-    this.logger = logger;
-  }
+  constructor(@inject(FILE_TYPES.ILogger) private loggerService: ILoggerService) {}
 
   catch(err: Error | HTTPError, req: Request, res: Response, next: NextFunction) {
     const isHttpError = err instanceof HTTPError;
     const status = isHttpError ? err.statusCode : 500;
     if (isHttpError) {
-      this.logger.error(`[${err.context}] Ошибка ${err.statusCode}: ${err.message}`);
+      this.loggerService.error(`[${err.context}] Ошибка ${err.statusCode}: ${err.message}`);
     }
     res.status(status).send(err.message);
   }

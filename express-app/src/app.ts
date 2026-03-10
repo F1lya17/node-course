@@ -1,35 +1,28 @@
 import express, { type Express, type Router } from "express";
 import { Server } from "http";
+import { inject, injectable } from "inversify";
+import "reflect-metadata";
 import type { ILoggerService } from "./logger/logger.service.js";
 import type { UsersController } from "./users/users-controller.js";
 import type { WeatherController } from "./weather/weather-controller.js";
 import type { IExceptionFilter } from "./errors/exception.filter.interface.js";
+import { FILE_TYPES } from "./file-types.js";
 
-type RoutesArray = { path: string; router: Router }[];
-
+@injectable()
 export class App {
   app: Express;
   port: number;
-  routes: RoutesArray;
   server: Server;
-  logger: ILoggerService;
-  userController: UsersController;
-  weatherController: WeatherController;
-  exceptionFilter: IExceptionFilter;
 
   constructor(
-    userController: UsersController,
-    weatherController: WeatherController,
-    exceptionFilter: IExceptionFilter,
-    logger: ILoggerService,
+    @inject(FILE_TYPES.UsersController) private userController: UsersController,
+    @inject(FILE_TYPES.WeatherController) private weatherController: WeatherController,
+    @inject(FILE_TYPES.IExceptionFilter) private exceptionFilter: IExceptionFilter,
+    @inject(FILE_TYPES.ILogger) private loggerService: ILoggerService,
     port: number = 3000,
   ) {
     this.app = express();
     this.port = port;
-    this.logger = logger;
-    this.userController = userController;
-    this.weatherController = weatherController;
-    this.exceptionFilter = exceptionFilter;
   }
 
   useRoutes() {
@@ -45,7 +38,7 @@ export class App {
     this.useRoutes();
     this.useExceptionFilters();
     this.server = this.app.listen(this.port, () =>
-      this.logger.log(`listening on port ${this.port}`),
+      this.loggerService.log(`listening on port ${this.port}`),
     );
   }
 }

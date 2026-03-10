@@ -1,8 +1,11 @@
 import axios from "axios";
 import type { Request, Response } from "express";
+import { inject, injectable } from "inversify";
+import "reflect-metadata";
 import { BaseController } from "../common/base-controller.js";
-import type { LoggerService } from "../logger/logger.service.js";
+import type { ILoggerService, LoggerService } from "../logger/logger.service.js";
 import { printWeather } from "./print-weather.js";
+import { FILE_TYPES } from "../file-types.js";
 
 export interface WeatherResponse {
   coord: {
@@ -55,9 +58,10 @@ export interface WeatherResponse {
 const TOKEN = "c393a1ec92b2ff26bf8716986c9932da";
 let globalTown = "ufa";
 
+@injectable()
 export class WeatherController extends BaseController {
-  constructor(logger: LoggerService) {
-    super(logger);
+  constructor(@inject(FILE_TYPES.ILogger) loggerService: ILoggerService) {
+    super(loggerService);
     this.bindRoutes([
       { path: "/change-town", func: this.changeTown, method: "post" },
       { path: "/", func: this.getWeather, method: "get" },

@@ -1,4 +1,6 @@
+import { injectable } from "inversify";
 import { Logger } from "tslog";
+import "reflect-metadata";
 
 export interface ILoggerService {
   log(...args: unknown[]): void;
@@ -6,6 +8,7 @@ export interface ILoggerService {
   warn(...args: unknown[]): void;
 }
 
+injectable();
 export class LoggerService implements ILoggerService {
   private logger: Logger<unknown>;
 
