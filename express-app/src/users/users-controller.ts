@@ -5,9 +5,10 @@ import { BaseController } from "../common/base-controller.js";
 import type { ILoggerService } from "../logger/logger.service.js";
 import { HTTPError } from "../errors/http-error.class.js";
 import { FILE_TYPES } from "../file-types.js";
+import type { IUsersController } from "./user-controller.interface.js";
 
 @injectable()
-export class UsersController extends BaseController {
+export class UsersController extends BaseController implements IUsersController {
   constructor(@inject(FILE_TYPES.ILogger) loggerService: ILoggerService) {
     super(loggerService);
     this.bindRoutes([
