@@ -3,9 +3,10 @@ import type { Request, Response } from "express";
 import { inject, injectable } from "inversify";
 import "reflect-metadata";
 import { BaseController } from "../common/base-controller.js";
-import type { ILoggerService, LoggerService } from "../logger/logger.service.js";
+import type { ILoggerService } from "../logger/logger.service.js";
 import { printWeather } from "./print-weather.js";
 import { FILE_TYPES } from "../file-types.js";
+import type { ExpressReturnType } from "../common/route.interface.js";
 
 export interface WeatherResponse {
   coord: {
@@ -69,7 +70,7 @@ export class WeatherController extends BaseController {
     ]);
   }
 
-  changeTown(req: Request, res: Response) {
+  changeTown(req: Request, res: Response): ExpressReturnType | void {
     const { town } = req.body;
 
     if (!town || typeof town !== "string" || town.trim() === "") {
@@ -80,7 +81,7 @@ export class WeatherController extends BaseController {
     this.ok(res, "Город изменен");
   }
 
-  async getWeather(req: Request, res: Response) {
+  async getWeather(req: Request, res: Response): Promise<void> {
     try {
       const town = req.params.town || globalTown;
 

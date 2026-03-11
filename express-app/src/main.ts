@@ -6,6 +6,8 @@ import { UsersController } from "./users/users-controller.js";
 import { WeatherController } from "./weather/weather-controller.js";
 import { FILE_TYPES } from "./file-types.js";
 
+type BootstrapReturn = { app: App; appContainer: Container };
+
 export const appBindings = new ContainerModule((bind) => {
   bind.bind<ILoggerService>(FILE_TYPES.ILogger).to(LoggerService);
   bind.bind<UsersController>(FILE_TYPES.UsersController).to(UsersController);
@@ -14,7 +16,7 @@ export const appBindings = new ContainerModule((bind) => {
   bind.bind<App>(FILE_TYPES.Application).to(App);
 });
 
-function bootstrap() {
+function bootstrap(): BootstrapReturn {
   const appContainer = new Container();
   appContainer.load(appBindings);
   const app = appContainer.get<App>(FILE_TYPES.Application);

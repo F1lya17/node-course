@@ -5,3 +5,5 @@ export interface IRouteController {
   func: (req: Request, res: Response, next: NextFunction) => void;
   method: keyof Pick<Router, "get" | "post" | "put" | "patch" | "delete">;
 }
+
+export type ExpressReturnType = Response<any, Record<string, any>>;

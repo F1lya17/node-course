@@ -25,16 +25,16 @@ export class App {
     this.port = port;
   }
 
-  useRoutes() {
+  useRoutes(): void {
     this.app.use("/users", this.userController.router);
     this.app.use("/weather", this.weatherController.router);
   }
 
-  useExceptionFilters() {
+  useExceptionFilters(): void {
     this.app.use(this.exceptionFilter.catch.bind(this.exceptionFilter));
   }
 
-  init() {
+  async init(): Promise<void> {
     this.useRoutes();
     this.useExceptionFilters();
     this.server = this.app.listen(this.port, () =>

@@ -17,11 +17,11 @@ export class UsersController extends BaseController implements IUsersController 
     ]);
   }
 
-  registry(req: Request, res: Response, next: NextFunction) {
+  registry(req: Request, res: Response, next: NextFunction): void {
     this.ok(res, "Got a POST request at /users/registry");
   }
 
-  login(req: Request, res: Response, next: NextFunction) {
+  login(req: Request, res: Response, next: NextFunction): void {
     next(new HTTPError(401, "Not authorized", "login"));
     // this.ok(res, "Got a POST request at /users/login");
   }

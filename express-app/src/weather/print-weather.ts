@@ -1,6 +1,6 @@
 import type { WeatherResponse } from "./weather-controller.js";
 
-export const printWeather = (data: WeatherResponse) => {
+export const printWeather = (data: WeatherResponse): string => {
   const strCity = `Погода в ${data.name}`;
 
   const strDescription = data.weather[0]?.description;
