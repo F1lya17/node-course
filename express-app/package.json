@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon",
+    "dev:inspect": "tsx watch --inspect=9229 src/main.ts",
     "start": "node dist/main.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx tsc",
