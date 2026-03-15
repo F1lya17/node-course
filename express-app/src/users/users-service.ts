@@ -6,7 +6,7 @@ import { UserEntity } from "./user.entity.js";
 @injectable()
 export class UsersService {
   async createUser(dto: UserRegisterDto): Promise<UserEntity | null> {
-    const newUser = new UserEntity(dto.login, dto.name);
+    const newUser = new UserEntity(dto.email, dto.name);
     await newUser.setPassword(dto.password);
 
     return null;

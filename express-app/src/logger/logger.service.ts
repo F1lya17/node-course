@@ -1,6 +1,5 @@
 import { injectable } from "inversify";
 import { Logger } from "tslog";
-import "reflect-metadata";
 
 export interface ILoggerService {
   log(...args: unknown[]): void;

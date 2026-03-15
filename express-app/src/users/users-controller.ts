@@ -1,6 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
 import { inject, injectable } from "inversify";
-import "reflect-metadata";
 import { BaseController } from "../common/base-controller.js";
 import type { ILoggerService } from "../logger/logger.service.js";
 import { HTTPError } from "../errors/http-error.class.js";
@@ -9,6 +8,7 @@ import type { IUsersController } from "./user-controller.interface.js";
 import { UserLoginDto } from "./dto/user-login.dto.js";
 import { UserRegisterDto } from "./dto/user-register.dto.js";
 import type { IUsersService } from "./users-service.interface.js";
+import { ValidateMiddleware } from "../common/validate.middleware.js";
 
 @injectable()
 export class UsersController extends BaseController implements IUsersController {
@@ -18,7 +18,12 @@ export class UsersController extends BaseController implements IUsersController 
   ) {
     super(loggerService);
     this.bindRoutes([
-      { path: "/registry", func: this.registry, method: "post" },
+      {
+        path: "/registry",
+        func: this.registry,
+        method: "post",
+        middlewares: [new ValidateMiddleware(UserRegisterDto)],
+      },
       { path: "/login", func: this.login, method: "post" },
     ]);
   }

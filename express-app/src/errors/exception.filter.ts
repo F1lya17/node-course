@@ -1,6 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
 import { inject, injectable } from "inversify";
-import "reflect-metadata";
 import type { ILoggerService } from "../logger/logger.service.js";
 import type { IExceptionFilter } from "./exception.filter.interface.js";
 import { HTTPError } from "./http-error.class.js";

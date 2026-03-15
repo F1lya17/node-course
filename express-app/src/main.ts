@@ -1,4 +1,5 @@
 import { Container, ContainerModule } from "inversify";
+import "reflect-metadata";
 import { App } from "./app.js";
 import { ExceptionFilter } from "./errors/exception.filter.js";
 import { type ILoggerService, LoggerService } from "./logger/logger.service.js";

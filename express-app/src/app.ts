@@ -1,7 +1,6 @@
 import express, { type Express, type Router } from "express";
 import { Server } from "http";
 import { inject, injectable } from "inversify";
-import "reflect-metadata";
 import type { ILoggerService } from "./logger/logger.service.js";
 import type { UsersController } from "./users/users-controller.js";
 import type { WeatherController } from "./weather/weather-controller.js";

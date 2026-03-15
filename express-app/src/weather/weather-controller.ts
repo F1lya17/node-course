@@ -1,7 +1,6 @@
 import axios from "axios";
 import type { Request, Response } from "express";
 import { inject, injectable } from "inversify";
-import "reflect-metadata";
 import { BaseController } from "../common/base-controller.js";
 import type { ILoggerService } from "../logger/logger.service.js";
 import { printWeather } from "./print-weather.js";
