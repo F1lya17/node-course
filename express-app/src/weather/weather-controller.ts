@@ -7,54 +7,8 @@ import type { ILoggerService } from "../logger/logger.service.js";
 import { printWeather } from "./print-weather.js";
 import { FILE_TYPES } from "../file-types.js";
 import type { ExpressReturnType } from "../common/route.interface.js";
-
-export interface WeatherResponse {
-  coord: {
-    lon: number;
-    lat: number;
-  };
-  weather: Array<{
-    id: number;
-    main: string;
-    description: string;
-    icon: string;
-  }>;
-  base: string;
-  main: {
-    temp: number;
-    feels_like: number;
-    temp_min: number;
-    temp_max: number;
-    pressure: number;
-    humidity: number;
-    sea_level: number;
-    grnd_level: number;
-  };
-  visibility: number;
-  wind: {
-    speed: number;
-    deg: number;
-    gust: number;
-  };
-  rain: {
-    "1h": number;
-  };
-  clouds: {
-    all: number;
-  };
-  dt: number;
-  sys: {
-    type: number;
-    id: number;
-    country: string;
-    sunrise: number;
-    sunset: number;
-  };
-  timezone: number;
-  id: number;
-  name: string;
-  cod: number;
-}
+import type { WeatherChangeTownDto } from "./dto/weather-change-town.dto.js";
+import type { WeatherResponse } from "./weather-controller.interface.js";
 
 const TOKEN = "c393a1ec92b2ff26bf8716986c9932da";
 let globalTown = "ufa";
@@ -70,7 +24,7 @@ export class WeatherController extends BaseController {
     ]);
   }
 
-  changeTown(req: Request, res: Response): ExpressReturnType | void {
+  changeTown(req: Request<{}, {}, WeatherChangeTownDto>, res: Response): ExpressReturnType | void {
     const { town } = req.body;
 
     if (!town || typeof town !== "string" || town.trim() === "") {

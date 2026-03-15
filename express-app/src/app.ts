@@ -25,6 +25,10 @@ export class App {
     this.port = port;
   }
 
+  useMiddleware(): void {
+    this.app.use(express.json());
+  }
+
   useRoutes(): void {
     this.app.use("/users", this.userController.router);
     this.app.use("/weather", this.weatherController.router);
@@ -35,6 +39,7 @@ export class App {
   }
 
   async init(): Promise<void> {
+    this.useMiddleware();
     this.useRoutes();
     this.useExceptionFilters();
     this.server = this.app.listen(this.port, () =>
