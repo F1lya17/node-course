@@ -9,15 +9,18 @@ import { FILE_TYPES } from "./file-types.js";
 import type { IUsersController } from "./users/user-controller.interface.js";
 import type { IUsersService } from "./users/users-service.interface.js";
 import { UsersService } from "./users/users-service.js";
+import { ConfigService } from "./config/config-service.js";
+import type { IConfigService } from "./config/config-servive.interface.js";
 
 type BootstrapReturn = { app: App; appContainer: Container };
 
 export const appBindings = new ContainerModule((bind) => {
-  bind.bind<ILoggerService>(FILE_TYPES.ILogger).to(LoggerService);
+  bind.bind<ILoggerService>(FILE_TYPES.ILogger).to(LoggerService).inSingletonScope();
   bind.bind<IUsersController>(FILE_TYPES.UsersController).to(UsersController);
   bind.bind<IUsersService>(FILE_TYPES.UsersService).to(UsersService);
   bind.bind<WeatherController>(FILE_TYPES.WeatherController).to(WeatherController);
-  bind.bind<ExceptionFilter>(FILE_TYPES.IExceptionFilter).to(ExceptionFilter);
+  bind.bind<ExceptionFilter>(FILE_TYPES.IExceptionFilter).to(ExceptionFilter).inSingletonScope();
+  bind.bind<IConfigService>(FILE_TYPES.IConfigService).to(ConfigService).inSingletonScope();
   bind.bind<App>(FILE_TYPES.Application).to(App);
 });
 

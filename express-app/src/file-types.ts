@@ -4,5 +4,6 @@ export const FILE_TYPES = {
   UsersController: Symbol.for("UsersController"),
   UsersService: Symbol.for("UsersService"),
   IExceptionFilter: Symbol.for("IExceptionFilter"),
+  IConfigService: Symbol.for("IConfigService"),
   WeatherController: Symbol.for("WeatherController"),
 };

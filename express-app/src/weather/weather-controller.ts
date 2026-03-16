@@ -8,13 +8,16 @@ import { FILE_TYPES } from "../file-types.js";
 import type { ExpressReturnType } from "../common/route.interface.js";
 import type { WeatherChangeTownDto } from "./dto/weather-change-town.dto.js";
 import type { WeatherResponse } from "./weather-controller.interface.js";
+import type { IConfigService } from "../config/config-servive.interface.js";
 
-const TOKEN = "c393a1ec92b2ff26bf8716986c9932da";
 let globalTown = "ufa";
 
 @injectable()
 export class WeatherController extends BaseController {
-  constructor(@inject(FILE_TYPES.ILogger) loggerService: ILoggerService) {
+  constructor(
+    @inject(FILE_TYPES.ILogger) loggerService: ILoggerService,
+    @inject(FILE_TYPES.IConfigService) private configService: IConfigService,
+  ) {
     super(loggerService);
     this.bindRoutes([
       { path: "/change-town", func: this.changeTown, method: "post" },
@@ -43,7 +46,7 @@ export class WeatherController extends BaseController {
         {
           params: {
             q: town,
-            appid: TOKEN,
+            appid: this.configService.get("WEATHER_API_KEY"),
             lang: "ru",
             units: "metric",
           },

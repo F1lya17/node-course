@@ -1,3 +1,4 @@
 /8-weather-extended/node_modules
 /express-app/node_modules
 /express-app/dist
+/express-app/.env
