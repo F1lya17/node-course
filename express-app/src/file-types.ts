@@ -6,4 +6,5 @@ export const FILE_TYPES = {
   IExceptionFilter: Symbol.for("IExceptionFilter"),
   IConfigService: Symbol.for("IConfigService"),
   WeatherController: Symbol.for("WeatherController"),
+  PrismaService: Symbol.for("PrismaService"),
 };

@@ -6,6 +6,7 @@ import type { UsersController } from "./users/users-controller.js";
 import type { WeatherController } from "./weather/weather-controller.js";
 import type { IExceptionFilter } from "./errors/exception.filter.interface.js";
 import { FILE_TYPES } from "./file-types.js";
+import type { PrismaService } from "./database/prisma-service.js";
 
 @injectable()
 export class App {
@@ -18,6 +19,7 @@ export class App {
     @inject(FILE_TYPES.WeatherController) private weatherController: WeatherController,
     @inject(FILE_TYPES.IExceptionFilter) private exceptionFilter: IExceptionFilter,
     @inject(FILE_TYPES.ILogger) private loggerService: ILoggerService,
+    @inject(FILE_TYPES.PrismaService) private prismaService: PrismaService,
     port: number = 3000,
   ) {
     this.app = express();
@@ -41,6 +43,7 @@ export class App {
     this.useMiddleware();
     this.useRoutes();
     this.useExceptionFilters();
+    await this.prismaService.connect();
     this.server = this.app.listen(this.port, () =>
       this.loggerService.log(`listening on port ${this.port}`),
     );

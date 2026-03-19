@@ -11,6 +11,7 @@ import type { IUsersService } from "./users/users-service.interface.js";
 import { UsersService } from "./users/users-service.js";
 import { ConfigService } from "./config/config-service.js";
 import type { IConfigService } from "./config/config-servive.interface.js";
+import { PrismaService } from "./database/prisma-service.js";
 
 type BootstrapReturn = { app: App; appContainer: Container };
 
@@ -21,6 +22,7 @@ export const appBindings = new ContainerModule((bind) => {
   bind.bind<WeatherController>(FILE_TYPES.WeatherController).to(WeatherController);
   bind.bind<ExceptionFilter>(FILE_TYPES.IExceptionFilter).to(ExceptionFilter).inSingletonScope();
   bind.bind<IConfigService>(FILE_TYPES.IConfigService).to(ConfigService).inSingletonScope();
+  bind.bind<PrismaService>(FILE_TYPES.PrismaService).to(PrismaService).inSingletonScope();
   bind.bind<App>(FILE_TYPES.Application).to(App);
 });
 
