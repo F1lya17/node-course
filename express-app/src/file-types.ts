@@ -7,4 +7,5 @@ export const FILE_TYPES = {
   IConfigService: Symbol.for("IConfigService"),
   WeatherController: Symbol.for("WeatherController"),
   PrismaService: Symbol.for("PrismaService"),
+  IUserRepository: Symbol.for("IUserRepository"),
 };

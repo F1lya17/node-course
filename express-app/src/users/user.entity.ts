@@ -4,12 +4,12 @@ export class UserEntity {
   private _password: string;
 
   constructor(
-    private _login: string,
+    private _email: string,
     private _name: string,
   ) {}
 
-  get login(): string {
-    return this._login;
+  get email(): string {
+    return this._email;
   }
 
   get name(): string {
