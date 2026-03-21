@@ -18,12 +18,12 @@ export class ConfigService implements IConfigService {
     }
   }
 
-  get(key: string): string | undefined {
+  get(key: string): string {
     if (!this.config) {
       this.loggerService.error("Config is not loaded");
-      return undefined;
+      return "";
     }
 
-    return this.config[key];
+    return this.config[key] as string;
   }
 }

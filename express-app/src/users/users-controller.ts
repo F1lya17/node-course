@@ -9,12 +9,15 @@ import { UserLoginDto } from "./dto/user-login.dto.js";
 import { UserRegisterDto } from "./dto/user-register.dto.js";
 import type { IUsersService } from "./users-service.interface.js";
 import { ValidateMiddleware } from "../common/validate.middleware.js";
+import jwt from "jsonwebtoken";
+import type { IConfigService } from "../config/config-servive.interface.js";
 
 @injectable()
 export class UsersController extends BaseController implements IUsersController {
   constructor(
     @inject(FILE_TYPES.ILogger) loggerService: ILoggerService,
     @inject(FILE_TYPES.UsersService) private userService: IUsersService,
+    @inject(FILE_TYPES.IConfigService) private configService: IConfigService,
   ) {
     super(loggerService);
     this.bindRoutes([
@@ -53,9 +56,26 @@ export class UsersController extends BaseController implements IUsersController 
   ): Promise<void> {
     const isUser = await this.userService.validateUser(req.body);
     if (isUser) {
-      this.ok(res, "Все верно, пользователь авторизован");
+      const token = await this.signJWT(req.body.email, this.configService.get("JWT_SECRET"));
+      this.ok(res, { token });
     } else {
       next(new HTTPError(401, "Неправильная почта или пароль", "login"));
     }
+  }
+
+  async signJWT(email: string, secret: string) {
+    return new Promise<string>((resolve, reject) => {
+      jwt.sign(
+        { email, iat: Math.floor(Date.now() / 1000) },
+        secret,
+        { algorithm: "HS256" },
+        (err, token) => {
+          if (err) {
+            reject(err);
+          }
+          resolve(token as string);
+        },
+      );
+    });
   }
 }
