@@ -24,7 +24,12 @@ export class UsersController extends BaseController implements IUsersController 
         method: "post",
         middlewares: [new ValidateMiddleware(UserRegisterDto)],
       },
-      { path: "/login", func: this.login, method: "post" },
+      {
+        path: "/login",
+        func: this.login,
+        method: "post",
+        middlewares: [new ValidateMiddleware(UserLoginDto)],
+      },
     ]);
   }
 
@@ -41,8 +46,16 @@ export class UsersController extends BaseController implements IUsersController 
     }
   }
 
-  login(req: Request<{}, {}, UserLoginDto>, res: Response, next: NextFunction): void {
-    next(new HTTPError(401, "Not authorized", "login"));
-    // this.ok(res, "Got a POST request at /users/login");
+  async login(
+    req: Request<{}, {}, UserLoginDto>,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    const isUser = await this.userService.validateUser(req.body);
+    if (isUser) {
+      this.ok(res, "Все верно, пользователь авторизован");
+    } else {
+      next(new HTTPError(401, "Неправильная почта или пароль", "login"));
+    }
   }
 }

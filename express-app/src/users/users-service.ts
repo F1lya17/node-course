@@ -26,6 +26,11 @@ export class UsersService {
   }
 
   async validateUser(dto: UserLoginDto): Promise<boolean> {
-    return true;
+    const existedUser = await this.userRepository.find(dto.email);
+    if (!existedUser) {
+      return false;
+    }
+    const user = new UserEntity(existedUser.email, existedUser.name, existedUser.password);
+    return user.comparePassword(dto.password);
   }
 }
