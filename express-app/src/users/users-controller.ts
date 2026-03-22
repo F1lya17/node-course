@@ -11,6 +11,7 @@ import type { IUsersService } from "./users-service.interface.js";
 import { ValidateMiddleware } from "../common/validate.middleware.js";
 import jwt from "jsonwebtoken";
 import type { IConfigService } from "../config/config-servive.interface.js";
+import { AuthGuard } from "../common/auth.guard.js";
 
 @injectable()
 export class UsersController extends BaseController implements IUsersController {
@@ -37,6 +38,7 @@ export class UsersController extends BaseController implements IUsersController 
         path: "/info",
         func: this.info,
         method: "post",
+        middlewares: [new AuthGuard()],
       },
     ]);
   }
@@ -85,10 +87,7 @@ export class UsersController extends BaseController implements IUsersController 
   }
 
   async info(req: Request, res: Response, next: NextFunction): Promise<void> {
-    if (req.user) {
-      this.ok(res, { email: req.user });
-    } else {
-      next(new HTTPError(401, "Unauthorized", "info"));
-    }
+    const user = await this.userService.getInfoUser(req.user as string);
+    this.ok(res, { id: user?.id, email: user?.email, name: user?.name });
   }
 }

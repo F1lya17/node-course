@@ -33,4 +33,8 @@ export class UsersService {
     const user = new UserEntity(existedUser.email, existedUser.name, existedUser.password);
     return user.comparePassword(dto.password);
   }
+
+  async getInfoUser(email: string) {
+    return this.userRepository.find(email);
+  }
 }
