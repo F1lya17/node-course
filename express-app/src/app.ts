@@ -1,4 +1,4 @@
-import express, { type Express, type Router } from "express";
+import express, { type Express } from "express";
 import { Server } from "http";
 import { inject, injectable } from "inversify";
 import type { ILoggerService } from "./logger/logger.service.js";
@@ -7,6 +7,8 @@ import type { WeatherController } from "./weather/weather-controller.js";
 import type { IExceptionFilter } from "./errors/exception.filter.interface.js";
 import { FILE_TYPES } from "./file-types.js";
 import type { PrismaService } from "./database/prisma-service.js";
+import { AuthMiddleware } from "./common/auth.middleware.js";
+import type { IConfigService } from "./config/config-servive.interface.js";
 
 @injectable()
 export class App {
@@ -20,6 +22,7 @@ export class App {
     @inject(FILE_TYPES.IExceptionFilter) private exceptionFilter: IExceptionFilter,
     @inject(FILE_TYPES.ILogger) private loggerService: ILoggerService,
     @inject(FILE_TYPES.PrismaService) private prismaService: PrismaService,
+    @inject(FILE_TYPES.IConfigService) private configService: IConfigService,
     port: number = 3000,
   ) {
     this.app = express();
@@ -28,6 +31,8 @@ export class App {
 
   useMiddleware(): void {
     this.app.use(express.json());
+    const authMiddleWare = new AuthMiddleware(this.configService.get("JWT_SECRET"));
+    this.app.use(authMiddleWare.execute.bind(authMiddleWare));
   }
 
   useRoutes(): void {

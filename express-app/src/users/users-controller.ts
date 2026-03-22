@@ -33,6 +33,11 @@ export class UsersController extends BaseController implements IUsersController 
         method: "post",
         middlewares: [new ValidateMiddleware(UserLoginDto)],
       },
+      {
+        path: "/info",
+        func: this.info,
+        method: "post",
+      },
     ]);
   }
 
@@ -77,5 +82,13 @@ export class UsersController extends BaseController implements IUsersController 
         },
       );
     });
+  }
+
+  async info(req: Request, res: Response, next: NextFunction): Promise<void> {
+    if (req.user) {
+      this.ok(res, { email: req.user });
+    } else {
+      next(new HTTPError(401, "Unauthorized", "info"));
+    }
   }
 }
