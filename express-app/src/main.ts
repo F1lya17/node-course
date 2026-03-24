@@ -20,7 +20,7 @@ type BootstrapReturn = { app: App; appContainer: Container };
 export const appBindings = new ContainerModule((bind) => {
   bind.bind<ILoggerService>(FILE_TYPES.ILogger).to(LoggerService).inSingletonScope();
   bind.bind<IUsersController>(FILE_TYPES.UsersController).to(UsersController);
-  bind.bind<IUsersService>(FILE_TYPES.UsersService).to(UsersService);
+  bind.bind<IUsersService>(FILE_TYPES.IUsersService).to(UsersService);
   bind.bind<WeatherController>(FILE_TYPES.WeatherController).to(WeatherController);
   bind.bind<ExceptionFilter>(FILE_TYPES.IExceptionFilter).to(ExceptionFilter).inSingletonScope();
   bind.bind<IConfigService>(FILE_TYPES.IConfigService).to(ConfigService).inSingletonScope();

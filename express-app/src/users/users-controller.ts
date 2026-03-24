@@ -17,7 +17,7 @@ import { AuthGuard } from "../common/auth.guard.js";
 export class UsersController extends BaseController implements IUsersController {
   constructor(
     @inject(FILE_TYPES.ILogger) loggerService: ILoggerService,
-    @inject(FILE_TYPES.UsersService) private userService: IUsersService,
+    @inject(FILE_TYPES.IUsersService) private userService: IUsersService,
     @inject(FILE_TYPES.IConfigService) private configService: IConfigService,
   ) {
     super(loggerService);
